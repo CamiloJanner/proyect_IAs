@@ -10,9 +10,9 @@ with open("Modelo_NB.bin", 'rb') as f:
 #Función que mostrará el resultado
 def clasificar (num):
     if num == 0:
-        return "Normal"
+        return "El cliente no va a desertar"
     elif num == 1:
-        return "Abnormal"
+        return "El cliente va a desertar"
 
 #Función que reproduce toda la página
 def main ():
