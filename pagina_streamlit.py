@@ -10,20 +10,24 @@ with open("Modelo_NB.bin", 'rb') as f:
 #Función que mostrará el resultado
 def clasificar (num):
     if num == 0:
-        return "El cliente no va a desertar"
+        original_title = '<p style="font-family:Candara; color:Green; font-size: 20px;">El cliente no va a desertar</p>'
+        st.markdown(original_title, unsafe_allow_html=True)
     elif num == 1:
-        return "El cliente va a desertar"
+        original_title = '<p style="font-family:Candara; color:Red; font-size: 20px;">El cliente va a desertar</p>'
+        st.markdown(original_title, unsafe_allow_html=True)
 
 #Función que reproduce toda la página
 def main ():
     #Título general
-    st.title("Prueba de modelo")
+    original_title = '<p style="font-family:Candara; color:White; font-size: 40px;">Prueba de modelo</p>'
+    st.markdown(original_title, unsafe_allow_html=True)
 
     #Titulo del sidebar
     st.sidebar.header("Insertar los datos")
 
     #Función donde el usuario selecciona los datos para que el modelo haga la predicción
     def user_input_parameters():
+        
         antig = st.sidebar.text_input("ANTIG")
         comp = st.sidebar.slider("COMP", 4414, 18338)
         prom = st.sidebar.text_input("PROM")
@@ -38,20 +42,21 @@ def main ():
         retre = st.sidebar.text_input("RETRE")
 
         data = {  'ANTIG': antig,
-                  'COMP': comp,
-                  'PROM': prom,
-                  'CATEG': categ,
-                  'COMINT': comint,
-                  'COMPPRES': compres,
-                  'RATE': rate,
-                  'VISIT': visit,
-                  'DIASSINQ': diasinq,
-                  'TASARET': tasaret,
-                  'NUMQ': numq,
-                  'RETRE': retre}
+                'COMP': comp,
+                'PROM': prom,
+                'CATEG': categ,
+                'COMINT': comint,
+                'COMPPRES': compres,
+                'RATE': rate,
+                'VISIT': visit,
+                'DIASSINQ': diasinq,
+                'TASARET': tasaret,
+                'NUMQ': numq,
+                'RETRE': retre}
 
         features = pd.DataFrame(data, index = [0])
         return features
+        
 
     df = user_input_parameters()
 
@@ -59,8 +64,12 @@ def main ():
     st.subheader("Datos insertados por el usuario")
     st.write(df)
 
-    if st.button ('Predict'):
-         st.success(clasificar(modelo.predict(df)))
+    try:
+        if st.button ('Predict'):
+            clasificar(modelo.predict(df))
+    except ValueError:
+            original_title = '<p style="font-family:Candara; color:Red; font-size: 20px;">No ha insertado los datos de acuerdo al modelo</p>'
+            st.markdown(original_title, unsafe_allow_html=True)
 
 if __name__ == '__main__':
     main()
