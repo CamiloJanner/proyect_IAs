@@ -4,7 +4,7 @@ import pickle
 import pandas as pd
 
 # Paso 1: Leer el archivo .bin
-with open("Modelo_NB.bin", 'rb') as f:
+with open("ModeloRegresion.bin", 'rb') as f:
         modelo = pickle.load(f)
 
 #Función que mostrará el resultado
