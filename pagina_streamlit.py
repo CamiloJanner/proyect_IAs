@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 
 # Cargar el modelo de análisis de sentimientos
-with open("ModeloSentimiento.bin", 'rb') as f:
+with open("ModeloRegresion.bin", 'rb') as f:
     modelo = pickle.load(f)
 
 # Función para clasificar el sentimiento
