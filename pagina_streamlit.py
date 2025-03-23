@@ -12,8 +12,8 @@ tokenizer_file_id = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
 model_url = f"https://drive.google.com/uc?id={model_file_id}"
 tokenizer_url = f"https://drive.google.com/uc?id={tokenizer_file_id}"
 
-model_output = "modelo_emocional.h5"
-tokenizer_output = "tokenizer.pickle"
+model_output = "sentiment140_model.h5"
+tokenizer_output = "tokenizer_sentiment140.pk"
 
 gdown.download(model_url, model_output, quiet=False)
 gdown.download(tokenizer_url, tokenizer_output, quiet=False)
