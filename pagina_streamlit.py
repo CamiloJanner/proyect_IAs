@@ -34,28 +34,9 @@ def descargar_archivo_drive(file_id, output_path):
             for chunk in response.iter_content(32768):
                 f.write(chunk)
 
-    if os.path.exists(output_path):
-        print(f"✅ {output_path} descargado correctamente.")
-    else:
-        print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
-
-
 # Descargar modelo y tokenizer
 descargar_archivo_drive(MODEL_ID, MODEL_PATH)
 descargar_archivo_drive(TOKENIZER_ID, TOKENIZER_PATH)
-
-# Verificar si los archivos están descargados
-if os.path.exists(MODEL_PATH) and os.path.exists(TOKENIZER_PATH):
-    st.write("✅ Descarga completada.")
-else:
-    st.write("❌ Error en la descarga. Verifica los IDs.")
-
-# Verificar si el modelo se descargó bien
-if os.path.exists(MODEL_PATH):
-    print(f"✅ Modelo descargado: {MODEL_PATH}")
-    print(f"📏 Tamaño: {os.path.getsize(MODEL_PATH)} bytes")
-else:
-    print(f"❌ Error: El modelo {MODEL_PATH} no existe.")
 
 # Cargar modelo y tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH, compile=False)
