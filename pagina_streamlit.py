@@ -19,12 +19,14 @@ def descargar_archivo(file_id, output_path):
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
     if not os.path.exists(output_path):
         print(f"Descargando {output_path}...")
-        gdown.download(url, output_path, quiet=False)
-        
-        if os.path.exists(output_path):
-            print(f"✅ {output_path} descargado correctamente.")
-        else:
-            print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
+        try:
+            gdown.download(url, output_path, quiet=False)
+            if os.path.exists(output_path):
+                print(f"✅ {output_path} descargado correctamente.")
+            else:
+                print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
+        except Exception as e:
+            print(f"❌ Error en la descarga: {str(e)}")
     else:
         print(f"{output_path} ya existe.")
 
