@@ -15,21 +15,20 @@ TOKENIZER_ID = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"  # Reemplázalo con el ID cor
 MODEL_PATH = "modelo_sentimiento.h5"
 TOKENIZER_PATH = "tokenizer.pickle"
 
-# Función para descargar archivos con wget
 def descargar_archivo(file_id, output_path):
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
     if not os.path.exists(output_path):
-        st.write(f"Descargando {output_path}...")
-        os.system(f"wget --no-check-certificate --content-disposition '{url}' -O {output_path}")
+        print(f"Descargando {output_path}...")
+        gdown.download(url, output_path, quiet=False)
         
         if os.path.exists(output_path):
-            st.write(f"✅ {output_path} descargado correctamente.")
+            print(f"✅ {output_path} descargado correctamente.")
         else:
-            st.write(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
+            print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
     else:
-        st.write(f"{output_path} ya existe.")
+        print(f"{output_path} ya existe.")
 
-# Descargar modelo y tokenizer
+# Descargar el modelo y el tokenizer
 descargar_archivo(MODEL_ID, MODEL_PATH)
 descargar_archivo(TOKENIZER_ID, TOKENIZER_PATH)
 
