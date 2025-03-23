@@ -48,6 +48,13 @@ if os.path.exists(MODEL_PATH) and os.path.exists(TOKENIZER_PATH):
 else:
     st.write("❌ Error en la descarga. Verifica los IDs.")
 
+# Verificar si el modelo se descargó bien
+if os.path.exists(MODEL_PATH):
+    print(f"✅ Modelo descargado: {MODEL_PATH}")
+    print(f"📏 Tamaño: {os.path.getsize(MODEL_PATH)} bytes")
+else:
+    print(f"❌ Error: El modelo {MODEL_PATH} no existe.")
+
 # Cargar modelo y tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH)
 with open(TOKENIZER_PATH, "rb") as handle:
