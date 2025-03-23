@@ -23,7 +23,24 @@ def descargar_modelo():
 
 descargar_modelo()
 
-# Cargar el modelo y el tokenizador
+# Verificar si los archivos existen en la carpeta
+archivos_en_directorio = os.listdir()
+
+st.write("### Archivos en el directorio:")
+st.write(archivos_en_directorio)
+
+# Verificar archivos específicos
+if os.path.exists(MODEL_PATH):
+    st.success(f"✅ Modelo encontrado: {MODEL_PATH}")
+else:
+    st.error(f"❌ Modelo NO encontrado: {MODEL_PATH}")
+
+if os.path.exists(TOKENIZER_PATH):
+    st.success(f"✅ Tokenizador encontrado: {TOKENIZER_PATH}")
+else:
+    st.error(f"❌ Tokenizador NO encontrado: {TOKENIZER_PATH}")
+
+# Cargar modelo y tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH)
 with open(TOKENIZER_PATH, "rb") as handle:
     tokenizer = pickle.load(handle)
