@@ -13,12 +13,17 @@ TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN
 MODEL_PATH = "sentiment140_model.h5"
 TOKENIZER_PATH = "tokenizer_sentiment140.pkl"
 
-# Función para descargar el modelo con `wget`
+# Función para descargar archivos con wget
 def descargar_archivo(file_id, output_path):
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
     if not os.path.exists(output_path):
         st.write(f"Descargando {output_path}...")
-        os.system(f"wget --no-check-certificate '{url}' -O {output_path}")
+        os.system(f"wget --no-check-certificate --content-disposition '{url}' -O {output_path}")
+        
+        if os.path.exists(output_path):
+            st.write(f"✅ {output_path} descargado correctamente.")
+        else:
+            st.write(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
     else:
         st.write(f"{output_path} ya existe.")
 
@@ -26,11 +31,11 @@ def descargar_archivo(file_id, output_path):
 descargar_archivo(MODEL_ID, MODEL_PATH)
 descargar_archivo(TOKENIZER_ID, TOKENIZER_PATH)
 
-# Verificar si los archivos se descargaron correctamente
+# Verificar si los archivos están descargados
 if os.path.exists(MODEL_PATH) and os.path.exists(TOKENIZER_PATH):
     st.write("✅ Descarga completada.")
 else:
-    st.write("❌ Error en la descarga.")
+    st.write("❌ Error en la descarga. Verifica los IDs.")
 
 # Cargar modelo y tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH)
