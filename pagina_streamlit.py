@@ -13,14 +13,13 @@ TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN
 MODEL_PATH = "sentiment140_model.h5"
 TOKENIZER_PATH = "tokenizer_sentiment140.pickle"
 
-# Descargar el modelo si no existe
 def descargar_modelo():
     if not os.path.exists(MODEL_PATH):
         st.write("Descargando el modelo...")
-        os.system(f"wget -O {MODEL_PATH} {MODEL_URL}")
+        gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
     if not os.path.exists(TOKENIZER_PATH):
         st.write("Descargando el tokenizador...")
-        os.system(f"wget -O {TOKENIZER_PATH} {TOKENIZER_URL}")
+        gdown.download(TOKENIZER_URL, TOKENIZER_PATH, quiet=False)
 
 descargar_modelo()
 
