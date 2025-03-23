@@ -24,8 +24,6 @@ def descargar_modelo():
 
 descargar_modelo()
 
-model.save("sentiment140_model.h5")
-
 # Cargar el modelo y el tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH)
 with open(TOKENIZER_PATH, "rb") as handle:
