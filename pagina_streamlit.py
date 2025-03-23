@@ -11,7 +11,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 MODEL_URL = "https://drive.google.com/uc?id=147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"
 TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
 MODEL_PATH = "sentiment140_model.h5"
-TOKENIZER_PATH = "tokenizer_sentiment140.pickle"
+TOKENIZER_PATH = "tokenizer_sentiment140.pkl"
 
 def descargar_modelo():
     if not os.path.exists(MODEL_PATH):
