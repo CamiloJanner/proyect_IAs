@@ -7,11 +7,13 @@ import random
 import pickle
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# URL del modelo y el tokenizer en Google Drive
-MODEL_URL = "https://drive.google.com/uc?id=147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"
-TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
-MODEL_PATH = "sentiment140_model.h5"
-TOKENIZER_PATH = "tokenizer_sentiment140.pkl"
+# IDs de los archivos en Google Drive
+MODEL_ID = "147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"  # Reemplázalo con el ID correcto
+TOKENIZER_ID = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"  # Reemplázalo con el ID correcto
+
+# Rutas donde se guardarán los archivos descargados
+MODEL_PATH = "modelo_sentimiento.h5"
+TOKENIZER_PATH = "tokenizer.pickle"
 
 # Función para descargar archivos con wget
 def descargar_archivo(file_id, output_path):
