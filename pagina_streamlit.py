@@ -8,6 +8,8 @@ import pickle
 import requests
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+print(tf.__version__)
+
 # IDs de los archivos en Google Drive
 MODEL_ID = "147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"  # Reemplázalo con el ID correcto
 TOKENIZER_ID = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"  # Reemplázalo con el ID correcto
