@@ -56,7 +56,7 @@ else:
     print(f"❌ Error: El modelo {MODEL_PATH} no existe.")
 
 # Cargar modelo y tokenizador
-modelo = tf.keras.models.load_model(MODEL_PATH)
+modelo = tf.keras.models.load_model(MODEL_PATH, compile=False)
 with open(TOKENIZER_PATH, "rb") as handle:
     tokenizer = pickle.load(handle)
 
