@@ -15,8 +15,8 @@ tokenizer_url = f"https://drive.google.com/uc?id={tokenizer_file_id}"
 model_output = "sentiment140_model.h5"
 tokenizer_output = "tokenizer_sentiment140.pk"
 
-gdown.download(model_url, model_output, quiet=False)
-gdown.download(tokenizer_url, tokenizer_output, quiet=False)
+gdown.download(model_url, model_output, use_cookies=False)
+gdown.download(tokenizer_url, tokenizer_output, use_cookies=False)
 
 # Cargar el modelo y el tokenizer
 modelo = tf.keras.models.load_model(model_output)
