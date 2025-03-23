@@ -1,23 +1,32 @@
 import streamlit as st
 import tensorflow as tf
-import gdown
 import numpy as np
+import gdown
+import os
 import random
 import pickle
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# URL de descarga del modelo y tokenizer (reemplaza con tus propios IDs de Google Drive)
-model_file_id = "147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"
-tokenizer_file_id = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
+# URL del modelo y el tokenizer en Google Drive
+MODEL_URL = "https://drive.google.com/uc?id=147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"
+TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
+MODEL_PATH = "sentiment140_model.h5"
+TOKENIZER_PATH = "tokenizer_sentiment140.pickle"
 
-model_output = "sentiment140_model.h5"
-tokenizer_output = "tokenizer_sentiment140.pk"
+# Descargar el modelo si no existe
+def descargar_modelo():
+    if not os.path.exists(MODEL_PATH):
+        st.write("Descargando el modelo...")
+        os.system(f"wget -O {MODEL_PATH} {MODEL_URL}")
+    if not os.path.exists(TOKENIZER_PATH):
+        st.write("Descargando el tokenizador...")
+        os.system(f"wget -O {TOKENIZER_PATH} {TOKENIZER_URL}")
 
-gdown.download(f"https://drive.google.com/uc?id={model_file_id}", model_output, quiet=False)
-gdown.download(f"https://drive.google.com/uc?id={tokenizer_file_id}", tokenizer_output, quiet=False)
+descargar_modelo()
 
-# Cargar el modelo y el tokenizer
-modelo = tf.keras.models.load_model(model_output)
-with open(tokenizer_output, 'rb') as handle:
+# Cargar el modelo y el tokenizador
+modelo = tf.keras.models.load_model(MODEL_PATH)
+with open(TOKENIZER_PATH, "rb") as handle:
     tokenizer = pickle.load(handle)
 
 # Frases de respuesta según la predicción
@@ -39,33 +48,25 @@ responses = {
     ]
 }
 
-def analizar_sentimiento(texto):
-    """Preprocesa el texto usando el tokenizer y predice el sentimiento."""
+# Función de predicción
+def predecir_sentimiento(texto):
     secuencia = tokenizer.texts_to_sequences([texto])
-    entrada = tf.keras.preprocessing.sequence.pad_sequences(secuencia, maxlen=100)
-    prediccion = np.argmax(modelo.predict(entrada))
-    return prediccion
+    secuencia_padded = pad_sequences(secuencia, maxlen=100)
+    prediccion = modelo.predict(secuencia_padded)
+    clase = np.argmax(prediccion)
+    return clase, random.choice(responses[clase])
 
+# UI en Streamlit
 def main():
     st.title("Análisis de Sentimiento con IA")
-    
-    # Cuadro de entrada
-    texto_usuario = st.text_area("Escribe una frase y presiona el botón para analizar su sentimiento:")
-    
+    texto_usuario = st.text_area("Escribe un mensaje para analizar su sentimiento:")
     if st.button("Comprobar Sentimiento"):
         if texto_usuario.strip():
-            sentimiento = analizar_sentimiento(texto_usuario)
-            respuesta = random.choice(responses[sentimiento])
-            
-            # Mostrar resultado
-            if sentimiento == 0:
-                st.markdown(f'<p style="color:green; font-size:20px;">{respuesta}</p>', unsafe_allow_html=True)
-            elif sentimiento == 1:
-                st.markdown(f'<p style="color:gray; font-size:20px;">{respuesta}</p>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<p style="color:red; font-size:20px;">{respuesta}</p>', unsafe_allow_html=True)
+            sentimiento, respuesta = predecir_sentimiento(texto_usuario)
+            st.write(f"**Resultado:** {['Positivo', 'Neutro', 'Negativo'][sentimiento]}")
+            st.write(f"**Respuesta:** {respuesta}")
         else:
-            st.warning("Por favor, ingresa un texto antes de comprobar el sentimiento.")
+            st.write("Por favor, escribe un mensaje para analizar.")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
