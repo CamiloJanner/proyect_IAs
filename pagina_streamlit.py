@@ -13,32 +13,24 @@ TOKENIZER_URL = "https://drive.google.com/uc?id=1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN
 MODEL_PATH = "sentiment140_model.h5"
 TOKENIZER_PATH = "tokenizer_sentiment140.pkl"
 
-def descargar_modelo():
-    if not os.path.exists(MODEL_PATH):
-        st.write("Descargando el modelo...")
-        gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
-    if not os.path.exists(TOKENIZER_PATH):
-        st.write("Descargando el tokenizador...")
-        gdown.download(TOKENIZER_URL, TOKENIZER_PATH, quiet=False)
+# Función para descargar el modelo con `wget`
+def descargar_archivo(file_id, output_path):
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    if not os.path.exists(output_path):
+        st.write(f"Descargando {output_path}...")
+        os.system(f"wget --no-check-certificate '{url}' -O {output_path}")
+    else:
+        st.write(f"{output_path} ya existe.")
 
-descargar_modelo()
+# Descargar modelo y tokenizer
+descargar_archivo(MODEL_ID, MODEL_PATH)
+descargar_archivo(TOKENIZER_ID, TOKENIZER_PATH)
 
-# Verificar si los archivos existen en la carpeta
-archivos_en_directorio = os.listdir()
-
-st.write("### Archivos en el directorio:")
-st.write(archivos_en_directorio)
-
-# Verificar archivos específicos
-if os.path.exists(MODEL_PATH):
-    st.success(f"✅ Modelo encontrado: {MODEL_PATH}")
+# Verificar si los archivos se descargaron correctamente
+if os.path.exists(MODEL_PATH) and os.path.exists(TOKENIZER_PATH):
+    st.write("✅ Descarga completada.")
 else:
-    st.error(f"❌ Modelo NO encontrado: {MODEL_PATH}")
-
-if os.path.exists(TOKENIZER_PATH):
-    st.success(f"✅ Tokenizador encontrado: {TOKENIZER_PATH}")
-else:
-    st.error(f"❌ Tokenizador NO encontrado: {TOKENIZER_PATH}")
+    st.write("❌ Error en la descarga.")
 
 # Cargar modelo y tokenizador
 modelo = tf.keras.models.load_model(MODEL_PATH)
