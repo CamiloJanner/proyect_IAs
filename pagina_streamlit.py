@@ -5,6 +5,7 @@ import gdown
 import os
 import random
 import pickle
+import requests
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # IDs de los archivos en Google Drive
@@ -15,24 +16,31 @@ TOKENIZER_ID = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"  # Reemplázalo con el ID cor
 MODEL_PATH = "modelo_sentimiento.h5"
 TOKENIZER_PATH = "tokenizer.pickle"
 
-def descargar_archivo(file_id, output_path):
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
-    if not os.path.exists(output_path):
-        print(f"Descargando {output_path}...")
-        try:
-            gdown.download(url, output_path, quiet=False)
-            if os.path.exists(output_path):
-                print(f"✅ {output_path} descargado correctamente.")
-            else:
-                print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
-        except Exception as e:
-            print(f"❌ Error en la descarga: {str(e)}")
-    else:
-        print(f"{output_path} ya existe.")
+def descargar_archivo_drive(file_id, output_path):
+    URL = "https://drive.google.com/uc?export=download"
 
-# Descargar el modelo y el tokenizer
-descargar_archivo(MODEL_ID, MODEL_PATH)
-descargar_archivo(TOKENIZER_ID, TOKENIZER_PATH)
+    with requests.Session() as session:
+        response = session.get(URL, params={'id': file_id}, stream=True)
+        
+        # Google Drive bloquea descargas grandes con una advertencia
+        for key, value in response.cookies.items():
+            if key.startswith('download_warning'):
+                response = session.get(URL, params={'id': file_id, 'confirm': value}, stream=True)
+
+        # Guardar el archivo descargado
+        with open(output_path, "wb") as f:
+            for chunk in response.iter_content(32768):
+                f.write(chunk)
+
+    if os.path.exists(output_path):
+        print(f"✅ {output_path} descargado correctamente.")
+    else:
+        print(f"❌ Error al descargar {output_path}. Verifica el ID del archivo.")
+
+
+# Descargar modelo y tokenizer
+descargar_archivo_drive(MODEL_ID, MODEL_PATH)
+descargar_archivo_drive(TOKENIZER_ID, TOKENIZER_PATH)
 
 # Verificar si los archivos están descargados
 if os.path.exists(MODEL_PATH) and os.path.exists(TOKENIZER_PATH):
