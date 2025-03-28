@@ -65,7 +65,7 @@ respuestas_negativas = [
 ]
 
 # Función para predecir el sentimiento y dar una respuesta con el puntaje
-def predict_sentiment(text):
+def predecir_sentimiento(text):
     sequence = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(sequence, maxlen=max_length, padding="post", truncating="post")
     prediction = model.predict(padded)[0][0]  # Probabilidad de ser positivo
