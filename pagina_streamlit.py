@@ -7,6 +7,7 @@ import pickle
 import requests
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from deep_translator import GoogleTranslator
 
 # IDs de los archivos en Google Drive
 MODEL_ID = "1ooYFg0KB5zVT3YfLCrTz8KJ3QvjYjPgg"
@@ -66,7 +67,10 @@ responses = {
 
 # Función para predecir el sentimiento y dar una respuesta
 def predecir_sentimiento(text):
-    sequence = tokenizer.texts_to_sequences([text])
+    # Traducir el texto de español a inglés
+    translated_text = GoogleTranslator(source='es', target='en').translate(text)
+    
+    sequence = tokenizer.texts_to_sequences([translated_text])
     padded = pad_sequences(sequence, maxlen=100, padding="post", truncating="post")
     prediccion = modelo.predict(padded)
     score = prediccion[0][0]
