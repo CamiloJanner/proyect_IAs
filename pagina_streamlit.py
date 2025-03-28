@@ -46,29 +46,29 @@ modelo = load_model()
 tokenizer = load_tokenizer()
 
 # Respuestas aleatorias para cada sentimiento
-respuestas_positivas = [
-    "¡Parece que estás de buen ánimo! Sigue disfrutando tu día. 😊",
-    "Tu mensaje refleja una actitud positiva. ¡Sigue así! 🌟",
-    "Se nota optimismo en tus palabras. ¡Eso es genial! 💪"
-]
-
-respuestas_neutras = [
-    "Tu mensaje parece ser neutral, sin una emoción fuerte asociada. 🤔",
-    "No detecto un sentimiento marcado en tu mensaje. ¿Tienes algo en mente? 🧐",
-    "Parece que es un comentario equilibrado, sin inclinación emocional. 🎭"
-]
-
-respuestas_negativas = [
-    "Percibo que podrías estar sintiéndote mal. Si necesitas hablar, aquí estoy. 🖤",
-    "Tu mensaje suena algo negativo. Espero que todo mejore pronto. 🌧️",
-    "Parece que no estás en tu mejor día. Recuerda que todo pasa. 💙"
-]
+responses = {
+    0: [
+        "¡Parece que estás de buen ánimo! Sigue disfrutando tu día. 😊",
+        "Tu mensaje refleja una actitud positiva. ¡Sigue así! 🌟",
+        "Se nota optimismo en tus palabras. ¡Eso es genial! 💪"
+    ],
+    1: [
+        "Tu mensaje parece ser neutral, sin una emoción fuerte asociada. 🤔",
+        "No detecto un sentimiento marcado en tu mensaje. ¿Tienes algo en mente? 🧐",
+        "Parece que es un comentario equilibrado, sin inclinación emocional. 🎭"
+    ],
+    2: [
+        "Percibo que podrías estar sintiéndote mal. Si necesitas hablar, aquí estoy. 🖤",
+        "Tu mensaje suena algo negativo. Espero que todo mejore pronto. 🌧️",
+        "Parece que no estás en tu mejor día. Recuerda que todo pasa. 💙"
+    ]
+}
 
 # Función para predecir el sentimiento y dar una respuesta
 def predecir_sentimiento(text):
     sequence = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(sequence, maxlen=100, padding="post", truncating="post")
-    prediccion = modelo.predict(padded)
+    prediccion = model.predict(padded)
     score = prediccion[0][0]
     
     if score < 0.4:
@@ -78,7 +78,7 @@ def predecir_sentimiento(text):
     else:
         clase = 1  # Neutro
     
-    return clase, random.choice(responses[clase])
+    return clase, random.choice(responses.get(clase, ["Error: Clase fuera de rango."]))
 
 # UI en Streamlit sin recargar toda la página
 st.title("Análisis de Sentimiento con IA")
