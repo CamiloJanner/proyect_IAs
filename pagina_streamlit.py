@@ -64,23 +64,21 @@ respuestas_negativas = [
     "Parece que no estás en tu mejor día. Recuerda que todo pasa. 💙"
 ]
 
-# Función para predecir el sentimiento y dar una respuesta con el puntaje
+# Función para predecir el sentimiento y dar una respuesta
 def predecir_sentimiento(text):
     sequence = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(sequence, maxlen=100, padding="post", truncating="post")
     prediccion = model.predict(padded)
-
-    if prediction < 0.4:
-        respuesta = random.choice(respuestas_negativas)
-        categoria = "Negativo"
-    elif prediction > 0.6:
-        respuesta = random.choice(respuestas_positivas)
-        categoria = "Positivo"
+    score = prediccion[0][0]
+    
+    if score < 0.4:
+        clase = 2  # Negativo
+    elif score > 0.6:
+        clase = 0  # Positivo
     else:
-        respuesta = random.choice(respuestas_neutras)
-        categoria = "Neutro"
-
-    return f"Sentimiento {categoria} ({prediction:.4f})\n{respuesta}"
+        clase = 1  # Neutro
+    
+    return clase, random.choice(responses[clase])
 
 # UI en Streamlit sin recargar toda la página
 st.title("Análisis de Sentimiento con IA")
