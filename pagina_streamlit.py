@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # IDs de los archivos en Google Drive
-MODEL_ID = "147X4OsrSDUoyCCZCgdLP2KBnpSORUzm6"
+MODEL_ID = "1ooYFg0KB5zVT3YfLCrTz8KJ3QvjYjPgg"
 TOKENIZER_ID = "1RkOdhGM7BUJWr0VLyj20VwlFjT0CCzN2"
 
 # Rutas locales
