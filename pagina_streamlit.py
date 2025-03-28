@@ -45,20 +45,42 @@ def load_tokenizer():
 modelo = load_model()
 tokenizer = load_tokenizer()
 
-# Respuestas según la predicción
-responses = {
-    0: ["Parece que estás de buen ánimo. Tu mensaje transmite optimismo.", "Tu mensaje refleja alegría y satisfacción.", "Se percibe un tono entusiasta en tu mensaje."],
-    1: ["Tu mensaje parece neutral, sin una carga emocional fuerte.", "No hay un sentimiento claro en tu mensaje.", "Parece que te mantienes en un estado equilibrado."],
-    2: ["Tu mensaje refleja preocupación o malestar.", "Parece que algo no ha salido como esperabas.", "Detecto un tono de tristeza o frustración en tu mensaje."]
-}
+# Respuestas aleatorias para cada sentimiento
+respuestas_positivas = [
+    "¡Parece que estás de buen ánimo! Sigue disfrutando tu día. 😊",
+    "Tu mensaje refleja una actitud positiva. ¡Sigue así! 🌟",
+    "Se nota optimismo en tus palabras. ¡Eso es genial! 💪"
+]
 
-# Función de predicción optimizada
-def predecir_sentimiento(texto):
-    secuencia = tokenizer.texts_to_sequences([texto])
-    secuencia_padded = pad_sequences(secuencia, maxlen=100)
-    prediccion = modelo.predict(secuencia_padded)
-    clase = np.argmax(prediccion)
-    return clase, random.choice(responses[clase])
+respuestas_neutras = [
+    "Tu mensaje parece ser neutral, sin una emoción fuerte asociada. 🤔",
+    "No detecto un sentimiento marcado en tu mensaje. ¿Tienes algo en mente? 🧐",
+    "Parece que es un comentario equilibrado, sin inclinación emocional. 🎭"
+]
+
+respuestas_negativas = [
+    "Percibo que podrías estar sintiéndote mal. Si necesitas hablar, aquí estoy. 🖤",
+    "Tu mensaje suena algo negativo. Espero que todo mejore pronto. 🌧️",
+    "Parece que no estás en tu mejor día. Recuerda que todo pasa. 💙"
+]
+
+# Función para predecir el sentimiento y dar una respuesta con el puntaje
+def predict_sentiment(text):
+    sequence = tokenizer.texts_to_sequences([text])
+    padded = pad_sequences(sequence, maxlen=max_length, padding="post", truncating="post")
+    prediction = model.predict(padded)[0][0]  # Probabilidad de ser positivo
+
+    if prediction < 0.4:
+        respuesta = random.choice(respuestas_negativas)
+        categoria = "Negativo"
+    elif prediction > 0.6:
+        respuesta = random.choice(respuestas_positivas)
+        categoria = "Positivo"
+    else:
+        respuesta = random.choice(respuestas_neutras)
+        categoria = "Neutro"
+
+    return f"Sentimiento {categoria} ({prediction:.4f})\n{respuesta}"
 
 # UI en Streamlit sin recargar toda la página
 st.title("Análisis de Sentimiento con IA")
