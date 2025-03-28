@@ -68,7 +68,7 @@ respuestas_negativas = [
 def predecir_sentimiento(text):
     sequence = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(sequence, maxlen=100, padding="post", truncating="post")
-    prediccion = model.predict(padded)
+    prediccion = modelo.predict(padded)
     score = prediccion[0][0]
     
     if score < 0.4:
